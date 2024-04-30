@@ -4,9 +4,7 @@ fn is_valid(c: char) -> bool {
 }
 
 fn get_result(op: char, a: bool, b: bool) -> bool {
-	if op == '!' {
-		return a != b
-	} else if op == '&' {
+	if op == '&' {
 		return a & b;
 	} else if op == '|' {
 		return a | b;
@@ -31,9 +29,16 @@ pub fn eval_formula(formula: &str) -> bool {
 			stack.push(false);
 		} else if c == '1' {
 			stack.push(true);
+		} else if c == '!' {
+			if stack.len() < 1 {
+				println!("Invalid formula");
+				return false;
+			}
+			let a = stack.pop().unwrap();
+			stack.push(!a);
 		} else {
 			if stack.len() < 2 {
-				println!("Invalid character: {}", c);
+				println!("Invalid formula");
 				return false;
 			}
 			let result = get_result(c, stack.pop().unwrap(), stack.pop().unwrap());
